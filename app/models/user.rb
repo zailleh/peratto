@@ -12,4 +12,20 @@
 #
 class User < ApplicationRecord
 
+  has_secure_password
+  attr_accessor :email
+
+  has_many :users_vocabularies
+
+  def email=(new_email)
+    @email = new_email.downcase
+    self.email_digest = Digest::SHA256.hexdigest(@email + Rails.application.credentials.salt)
+  end
+
+  def self.find_by_email(email)
+    find_by(
+      :email_digest => Digest::SHA256.hexdigest(email.downcase + Rails.application.credentials.salt)
+    )
+  end
+
 end

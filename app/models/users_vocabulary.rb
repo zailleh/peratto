@@ -11,4 +11,7 @@
 #
 class UsersVocabulary < ApplicationRecord
 
+  belongs_to :user
+  belongs_to :vocabulary
+
 end
