@@ -20,18 +20,24 @@
           <li class="nav-item">
             <a class="nav-link active" href="/">Home</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/lesson" role="button" aria-haspopup="true" aria-expanded="false">Start Lesson</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="/lesson?mode=endless">Endless</a>
-              <a class="dropdown-item" href="/lesson?mode=random"">Random</a>
-            </div>
-          </li>
+          <% if @current_user.present? %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/start_lesson" role="button" aria-haspopup="true" aria-expanded="false">Start Lesson</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/start_lesson?mode=endless">Endless</a>
+                <a class="dropdown-item" href="/start_lesson?mode=random"">Random</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/history">History</a>
+            </li>
+          <% end %>
           <li class="nav-item">
-            <a class="nav-link" href="/history">History</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
+            <% if @current_user.blank? %>
+              <a class="nav-link" href="/login">Login</a>
+            <% else %>
+              <%= link_to 'Logout', logout_path, class: 'nav-link' %>
+            <% end %>
           </li>
         </ul>
       </div>

@@ -1,0 +1,51 @@
+<% if params[:mode].present? %>
+  <h3>Start <%= params[:mode].titleize %> Lesson</h3>
+  <% if params[:mode] == "endless"  %><p>Keep practicing until you're ready to drop</p><% end %>
+  <% if params[:mode] == "random"  %><p>Practice a random selection of vocabulary</p><% end %>
+
+  <%= form_tag(lesson_path, method: "get") do |f| %>
+    <div class="form-group">
+      <%= label_tag :jlpt_level, 'JLPT Level' %>
+      <div class="row justify-content-around">
+        <% 5.downto(1).with_index do |n| %>
+          <div class="form-check">
+            <%= radio_button_tag :jlpt_level, n, n == 5, :class => 'form-check-input' %>
+            <%= label_tag "jlpt_level_#{n}", n, :class => 'form-check-label' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <% if params[:mode] == "random" %>
+      <div class="form-group">
+        <%= label_tag :lesson_length, 'Number of Cards' %>
+        <div class="row justify-content-around">
+          <div class="form-check">
+            <%= radio_button_tag :lesson_length, 10, true, :value => 10, :class => 'form-check-input' %>
+            <%= label_tag :lesson_length_10, 10, :class => 'form-check-label' %>
+          </div>
+          <div class="form-check">
+            <%= radio_button_tag :lesson_length, 25, false, :value => 25, :class => 'form-check-input' %>
+            <%= label_tag :lesson_length_25, 25, :class => 'form-check-label' %>
+          </div>
+          <div class="form-check">
+            <%= radio_button_tag :lesson_length, 50, false, :value => 50, :class => 'form-check-input' %>
+            <%= label_tag :lesson_length_50, 50, :class => 'form-check-label' %>
+          </div>
+          <div class="form-check">
+            <%= radio_button_tag :lesson_length, 100, false, :value => 100, :class => 'form-check-input' %>
+            <%= label_tag :lesson_length_100, 100, :class => 'form-check-label' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <div class="d-flex justify-content-end">
+      <%= submit_tag 'Start Lesson!', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+<% else %>
+  <h3>Start Lesson</h3>
+  <p>What would you like to do today?</p>
+
+  <a class="btn btn-secondary btn-lg my-2" href="/start_lesson?mode=random" role="button">Random</a>
+  <a class="btn btn-primary btn-lg my-2"href="/start_lesson?mode=endless" role="button">Endless</a>
+<% end %>
