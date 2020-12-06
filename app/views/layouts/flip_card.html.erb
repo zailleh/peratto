@@ -1,0 +1,34 @@
+<% bg_class = defined?(correct) && correct ? "bg-gradient-success" : "bg-gradient-info" %>
+
+
+<div class="card mb-3 mt-5 mx-auto" style="max-width: 540px;">
+  <div class="row no-gutters align-items-stretch">
+    <div class="col-md-6 <%= bg_class %> text-white d-flex flex-column align-items-center justify-content-center">
+      <%= yield :vocabulary %>
+    </div>
+    <div class="col-md-6 card-body pb-0" style="padding-top: 1px">
+      <%= yield :answers %>
+    </div>
+  </div>
+  <div class="card-footer text-muted d-flex flex-column align-items-end">
+    <% if params[:lesson_length].present? %>
+      <div class="progress w-100">
+        <div class="progress-bar" style="width: <%= session[:viewed_cards].length / params[:lesson_length].to_f * 100 %>%" role="progressbar" aria-valuenow="<%= session[:viewed_cards].length %>" aria-valuemin="0" aria-valuemax="<%= params[:lesson_length] %>"></div>
+      </div>
+    <% end %>
+
+    <div>
+      <% if params[:lesson_length].blank? %>
+        <%= link_to "Finish", history_path, class: 'btn btn-secondary mt-1', role: "button" %>
+      <% end %>
+
+      <% if defined? correct %>
+        <% if @finished %>
+          <%= link_to "Finish", history_path, class: 'btn btn-primary mt-1', role: "button" %>
+        <% else %>
+          <%= link_to "Next", lesson_path(params.permit(:lesson_length, :jlpt_level)), method: "get", class: 'btn btn-primary mt-1 ml-1', role: "button" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

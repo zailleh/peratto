@@ -1,1 +1,29 @@
-<h3>Lesson History</h3>
+<h3 class="text-center">Lesson History</h3>
+
+<% @user_vocabularies.each do |vocabulary| %>
+  <div class="card my-2 mx-auto" style="max-width: 540px;">
+    <div class="row no-gutters align-items-stretch">
+      <div class="col-md-6 bg-gradient-light d-flex flex-column align-items-center justify-content-center">
+        <h5 class="card-title">
+          <%= vocabulary.kanji.presence || vocabulary.hiragana %>
+        </h5>
+        <% if vocabulary.kanji.present? %>
+          <p class="lead">
+            <%= vocabulary.hiragana %>
+          </p>
+        <% end %>
+        <p><%= vocabulary.meaning %></p>
+      </div>
+      <div class="col-md-6 card-body pb-0" style="padding-top: 1px">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Times Practiced: <%= vocabulary.times_practiced %></li>
+          <li class="list-group-item">Correct: <%= vocabulary.correct %></li>
+          <li class="list-group-item">Incorrect: <%= vocabulary.incorrect %></li>
+          <li class="list-group-item">
+            <small class="text-muted">Last practiced: <%= vocabulary.last_tested %></small>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>

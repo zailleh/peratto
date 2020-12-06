@@ -1,0 +1,24 @@
+<% content_for :vocabulary do %>
+  <h5 class="card-title display-4">
+    <%= @vocabulary.kanji.presence || @vocabulary.hiragana %>
+  </h5>
+  <% if @vocabulary.kanji.present? %>
+    <p class="lead">
+      <%= @vocabulary.hiragana %>
+    </p>
+  <% end %>
+<% end %>
+
+<% content_for :answers do %>
+  <ul class="list-group list-group-flush">
+    <% @answers.each do |answer| %>
+      <%
+        bg_class = @vocabulary.id == answer.id ? ' bg-success text-white' : ''
+        bg_class = ' bg-danger text-white' if !@correct && @selected_vocabulary_id == answer.id
+      %>
+      <li class="list-group-item<%= bg_class %>"><%= answer.meaning %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= render template: "layouts/flip_card", locals: { :correct => @correct } %>

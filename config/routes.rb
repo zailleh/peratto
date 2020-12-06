@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   get '/history', to: 'users_vocabularies#history'
   get '/start_lesson', to: 'users_vocabularies#start_lesson'
 
-  get '/lesson', to: 'user_vocabularies#view_card'
-  post '/lesson', to: 'user_vocabularies#match_card'
+  get '/lesson', to: 'users_vocabularies#view_card'
+  post '/lesson', to: 'users_vocabularies#match_card'
 
   root :to => "public#index"
 end
