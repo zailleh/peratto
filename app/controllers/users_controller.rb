@@ -3,7 +3,22 @@ class UsersController < ApplicationController
   before_action :require_authentication, :only => [:logout]
 
   def create
+    allowed_params = params.require(:user).permit(:email, :password, :password_confirmation)
 
+    user = User.create(allowed_params)
+    if user.valid?
+      user.save!
+      session[:user_id] = user.id
+
+      redirect_to start_lesson_path
+    else
+      flash[:signup_error] = user.errors.full_messages
+      flash[:email] = allowed_params[:email]
+      flash[:password] = allowed_params[:password]
+      flash[:password_confirmation] = allowed_params[:password_confirmation]
+
+      redirect_to signup_path
+    end
   end
 
   def login

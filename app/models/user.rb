@@ -17,6 +17,8 @@ class User < ApplicationRecord
 
   has_many :users_vocabularies
 
+  validates :email_digest, uniqueness: { message: "Email has already been taken" }
+
   def email=(new_email)
     @email = new_email.downcase
     self.email_digest = Digest::SHA256.hexdigest(@email + Rails.application.credentials.salt)

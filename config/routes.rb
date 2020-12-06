@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post '/login', to: 'users#authenticate'
   get '/logout', to: 'users#logout'
   get '/signup', to: 'users#signup'
+  post '/signup', to: 'users#create'
 
   get '/history', to: 'users_vocabularies#history'
   get '/start_lesson', to: 'users_vocabularies#start_lesson'
