@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     user = User.create(allowed_params)
     if user.valid?
       user.save!
-      session[:user_id] = user.id
+      store_login(user.id)
 
       redirect_to start_lesson_path
     else
@@ -31,7 +31,7 @@ class UsersController < ApplicationController
     user = User.find_by_email(allowed_params[:email]).try(:authenticate, allowed_params[:password])
 
     if user.present?
-      session[:user_id] = user.id
+      store_login(user.id)
 
       if flash[:redirect_from].present?
         redirect_to flash[:redirect_from]
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
   end
 
   def logout
-    session[:user_id] = nil
+    remove_login
     redirect_to root_path
   end
 

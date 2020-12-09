@@ -1,13 +1,23 @@
 class ApplicationController < ActionController::Base
 
-  attr_reader :current_user
+  helper_method :current_user
+
+  def current_user
+    @current_user ||= User.find_by(:id => cookies.signed[:user_id]) if cookies.signed[:user_id].present?
+  end
 
   private
 
-  def require_authentication
-    @current_user = User.find_by(:id => session[:user_id]) if session[:user_id].present?
+  def store_login(user_id)
+    cookies.signed[:user_id] = { value: user_id, expires: 1.month }
+  end
 
-    unless @current_user.present?
+  def remove_login
+    cookies.signed[:user_id] = nil
+  end
+
+  def require_authentication
+    unless current_user.present?
       flash[:redirect_from] = request.original_url
       flash[:login_error] = "Not logged in"
       redirect_to login_path

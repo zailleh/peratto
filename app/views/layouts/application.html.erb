@@ -21,7 +21,7 @@
           <li class="nav-item">
             <a class="nav-link active" href="/">Home</a>
           </li>
-          <% if @current_user.present? %>
+          <% if current_user.present? %>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/start_lesson" role="button" aria-haspopup="true" aria-expanded="false">Start Lesson</a>
               <div class="dropdown-menu">
@@ -34,7 +34,7 @@
             </li>
           <% end %>
           <li class="nav-item">
-            <% if @current_user.blank? %>
+            <% if current_user.blank? %>
               <a class="nav-link" href="/login">Login</a>
             <% else %>
               <%= link_to 'Logout', logout_path, class: 'nav-link' %>
