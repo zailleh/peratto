@@ -9,7 +9,6 @@
 Vocabulary.delete_all
 
 n5_vocab = [
-	["kanji","hiragana","meaning","level"],
 	["会う","あう","to meet","5"],
 	["青","あお","blue","5"],
 	["青い","あおい","blue","5"],

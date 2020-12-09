@@ -1,15 +1,24 @@
 <% content_for :vocabulary do %>
   <h5 class="card-title display-4">
-    <%= @vocabulary.kanji.presence || @vocabulary.hiragana %>
+    <%=
+      case params[:difficulty]
+      when 'hard' then @vocabulary.kanji
+      when 'medium' then (@vocabulary.kanji.presence || @vocabulary.hiragana)
+      when 'easy' then @vocabulary.hiragana
+      else @vocabulary.hiragana
+      end
+    %>
   </h5>
 <% end %>
 
 <% content_for :answers do %>
-  <%= form_tag(lesson_path(params.permit(:lesson_length, :jlpt_level)), method: "post", class: 'w-100') do %>
+  <%= form_tag(lesson_path(params.permit(:lesson_length, :jlpt_level, :difficulty)), method: "post", class: 'w-100') do %>
     <div class="btn-group-vertical btn-group-lg w-100" role="group" aria-label="Multiple choice answer buttons">
       <%= hidden_field_tag :vocabulary_id,  @vocabulary.id %>
       <% @answers.each do |answer| %>
-        <button class="btn btn-light" type="submit" name="selected_vocabulary_id" value="<%= answer.id %>"><%= answer.meaning %></button>
+        <button class="btn btn-light" type="submit" name="selected_vocabulary_id" value="<%= answer.id %>">
+          <%= params[:difficulty] == 'hard' ? answer.hiragana : answer.meaning %>
+        </button>
       <% end %>
     </div>
   <% end %>

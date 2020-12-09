@@ -1,27 +1,34 @@
 <h3 class="text-center">Lesson History</h3>
 
-<% @user_vocabularies.each do |vocabulary| %>
+<% @vocabulary_counts.each_pair do |level, count| %>
   <div class="card my-2 mx-auto" style="max-width: 540px;">
     <div class="row no-gutters align-items-stretch">
       <div class="col-md-6 bg-gradient-light d-flex flex-column align-items-center justify-content-center">
         <h5 class="card-title">
-          <%= vocabulary.kanji.presence || vocabulary.hiragana %>
+          JLPT <%= level %>
         </h5>
-        <% if vocabulary.kanji.present? %>
-          <p class="lead">
-            <%= vocabulary.hiragana %>
-          </p>
-        <% end %>
-        <p><%= vocabulary.meaning %></p>
+        <p class="lead">
+          <%= count %> words
+        </p>
+
       </div>
       <div class="col-md-6 card-body pb-0" style="padding-top: 1px">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Times Practiced: <%= vocabulary.times_practiced %></li>
-          <li class="list-group-item">Correct: <%= vocabulary.correct %></li>
-          <li class="list-group-item">Incorrect: <%= vocabulary.incorrect %></li>
+          <% study_stats = @user_vocabularies_counts[level] || Hash.new(0) %>
+          <% level_completion = (study_stats[:studied] / count.to_f * 100).truncate(2) %>
           <li class="list-group-item">
-            <small class="text-muted">Last practiced: <%= vocabulary.last_tested %></small>
+            <span>
+              Total Studied: <%= study_stats[:studied] %> (<%=  level_completion %>%)
+            </span>
+            <div class="progress w-100">
+              <div class="progress-bar" style="width: <%= level_completion %>%" role="progressbar" aria-valuenow="<%= study_stats[:studied] %>" aria-valuemin="0" aria-valuemax="<%= count %>">
+                <%= level_completion %>%
+              </div>
+            </div>
           </li>
+          <li class="list-group-item">Correct: <%= study_stats[:correct] %></li>
+          <li class="list-group-item">Incorrect: <%= study_stats[:incorrect] %></li>
+          <li class="list-group-item">Ratio: <%= (study_stats[:correct].to_f / study_stats[:incorrect].to_f).truncate(2) %></li>
         </ul>
       </div>
     </div>

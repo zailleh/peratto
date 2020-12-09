@@ -26,7 +26,7 @@
         <% if @finished %>
           <%= link_to "Finish", history_path, class: 'btn btn-primary mt-1', role: "button" %>
         <% else %>
-          <%= link_to "Next", lesson_path(params.permit(:lesson_length, :jlpt_level)), method: "get", class: 'btn btn-primary mt-1 ml-1', role: "button" %>
+          <%= link_to "Next", lesson_path(params.permit(:lesson_length, :jlpt_level, :difficulty)), method: "get", class: 'btn btn-primary mt-1 ml-1', role: "button" %>
         <% end %>
       <% end %>
     </div>

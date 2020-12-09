@@ -15,6 +15,23 @@
         <% end %>
       </div>
     </div>
+    <div class="form-group">
+      <%= label_tag :difficulty, 'Difficulty' %>
+      <div class="row justify-content-around">
+        <div class="form-check">
+          <%= radio_button_tag :difficulty, :easy, true, :value => :easy, :class => 'form-check-input' %>
+          <%= label_tag :difficulty_easy, "Match Kana to Meaning", :class => 'form-check-label' %>
+        </div>
+        <div class="form-check">
+          <%= radio_button_tag :difficulty, :medium, false, :value => :medium, :class => 'form-check-input' %>
+          <%= label_tag :difficulty_medium, "Match Kanji to Meaning", :class => 'form-check-label' %>
+        </div>
+        <div class="form-check">
+          <%= radio_button_tag :difficulty, :hard, false, :value => :hard, :class => 'form-check-input' %>
+          <%= label_tag :difficulty_hard, "Match Kanji to Kana", :class => 'form-check-label' %>
+        </div>
+      </div>
+    </div>
     <% if params[:mode] == "random" %>
       <div class="form-group">
         <%= label_tag :lesson_length, 'Number of Cards' %>
@@ -39,7 +56,7 @@
       </div>
     <% end %>
     <div class="d-flex justify-content-end">
-      <%= submit_tag 'Start Lesson!', class: 'btn btn-primary', name: 'start', value: true %>
+      <%= submit_tag 'Start Lesson!', class: 'btn btn-primary', name: nil %>
     </div>
   <% end %>
 <% else %>

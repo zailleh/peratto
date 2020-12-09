@@ -2,15 +2,11 @@ class UsersVocabulariesController < ApplicationController
 
   before_action :require_authentication
 
-  def index
-    @users_vocabularies = current_user.users_vocabularies
+  def start_lesson
+    session[:viewed_cards] = []
   end
 
   def view_card
-    if params[:start]
-      session[:viewed_cards] = []
-    end
-
     if session[:viewed_cards].nil?
       redirect_to start_lesson_path
     elsif flash[:check_answer_data].present?
@@ -18,13 +14,15 @@ class UsersVocabulariesController < ApplicationController
 
       render :check_answer
     else
-      vocabularies = Vocabulary.where(:level => params[:jlpt_level]).ids
-      vocabulary_id = (vocabularies - session[:viewed_cards]).sample
+      vocabularies = Vocabulary.where(:level => params[:jlpt_level])
+      vocabularies = vocabularies.where.not(:kanji => [nil, ""]) if params[:difficulty] == "hard"
+      vocabulary_ids = vocabularies.ids
+      vocabulary_id = (vocabulary_ids - session[:viewed_cards]).sample
 
       session[:viewed_cards] << vocabulary_id
 
       @vocabulary = Vocabulary.find(vocabulary_id)
-      alternate_vocabulary = Vocabulary.where(:id => (vocabularies - [vocabulary_id]).sample(4))
+      alternate_vocabulary = Vocabulary.where(:id => (vocabulary_ids - [vocabulary_id]).sample(4))
 
       @answers = ([@vocabulary] + alternate_vocabulary).shuffle
       flash[:answer_ids] = @answers.map(&:id)
@@ -38,11 +36,12 @@ class UsersVocabulariesController < ApplicationController
       :selected_vocabulary_id => params[:selected_vocabulary_id]
     }
 
-    redirect_to lesson_path(params.permit(:lesson_length, :jlpt_level))
+    redirect_to lesson_path(params.permit(:lesson_length, :jlpt_level, :difficulty))
   end
 
   def history
-    @user_vocabularies = UsersVocabulary.includes(:vocabulary).where(:user => current_user)
+    @vocabulary_counts = Vocabulary.counts_by_level
+    @user_vocabularies_counts = UsersVocabulary.counts_by_level(current_user)
   end
 
   private
