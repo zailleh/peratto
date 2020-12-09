@@ -8,6 +8,10 @@
     <footer class="blockquote-footer">flip flip flip</footer>
   </blockquote>
 
-  <a class="btn btn-outline-primary btn-lg my-2" href="/login" role="button">Login</a>
-  <a class="btn btn-primary btn-lg my-2" href="/signup" role="button">Sign Up</a>
+  <% if current_user.present? %>
+    <a class="btn btn-primary btn-lg my-2" href="<%= start_lesson_path %>" role="button">Start Lesson</a>
+  <% else %>
+    <a class="btn btn-outline-primary btn-lg my-2" href="<%= login_path %>" role="button">Login</a>
+    <a class="btn btn-primary btn-lg my-2" href="<%= signup_path %>" role="button">Sign Up</a>
+  <% end %>
 </div>

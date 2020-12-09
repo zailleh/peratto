@@ -19,23 +19,23 @@
         </h1>
         <ul class="col-auto nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link active" href="/">Home</a>
+            <a class="nav-link <%= 'active' if current_page?(root_path) %>" href="/">Home</a>
           </li>
           <% if current_user.present? %>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/start_lesson" role="button" aria-haspopup="true" aria-expanded="false">Start Lesson</a>
+              <a class="nav-link dropdown-toggle <%= 'active' if current_page?(lesson_path) || current_page?(start_lesson_path) %>" data-toggle="dropdown" href="/start_lesson" role="button" aria-haspopup="true" aria-expanded="false">Lessons</a>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/start_lesson?mode=endless">Endless</a>
                 <a class="dropdown-item" href="/start_lesson?mode=random"">Random</a>
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/history">History</a>
+              <a class="nav-link <%= 'active' if current_page?(history_path) %>" href="/history">History</a>
             </li>
           <% end %>
           <li class="nav-item">
             <% if current_user.blank? %>
-              <a class="nav-link" href="/login">Login</a>
+              <a class="nav-link <%= 'active' if current_page?(login_path) %>" href="/login">Login</a>
             <% else %>
               <%= link_to 'Logout', logout_path, class: 'nav-link' %>
             <% end %>
