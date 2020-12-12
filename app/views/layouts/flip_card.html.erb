@@ -1,9 +1,6 @@
-<% bg_class = defined?(correct) && correct ? "bg-gradient-success" : "bg-gradient-info" %>
-
-
 <div class="card mb-3 mt-5 mx-auto" style="max-width: 540px;">
   <div class="row no-gutters align-items-stretch">
-    <div class="col-md-6 <%= bg_class %> text-white d-flex flex-column align-items-center justify-content-center">
+    <div id="vocab-area" class="col-md-6 bg-gradient-info text-white d-flex flex-column align-items-center justify-content-center">
       <%= yield :vocabulary %>
     </div>
     <div class="col-md-6 card-body pb-0" style="padding-top: 1px">
@@ -18,16 +15,12 @@
     <% end %>
 
     <div>
-      <% if params[:lesson_length].blank? %>
-        <%= link_to "Finish", history_path, class: 'btn btn-secondary mt-1', role: "button" %>
+      <% if session[:lesson_length].blank? || session[:viewed_cards].length >= session[:lesson_length].to_i %>
+        <%= link_to "Finish", history_path, class: 'btn btn-secondary mt-1', role: "button", id: 'finish-button', style: session[:lesson_length].present? ? "display: none;" : "" %>
       <% end %>
 
-      <% if defined? correct %>
-        <% if @finished %>
-          <%= link_to "Finish", history_path, class: 'btn btn-primary mt-1', role: "button" %>
-        <% else %>
-          <%= link_to "Next", lesson_path(params.permit(:lesson_length, :jlpt_level, :difficulty)), method: "get", class: 'btn btn-primary mt-1 ml-1', role: "button" %>
-        <% end %>
+      <% if session[:lesson_length].blank? || session[:viewed_cards].length < session[:lesson_length].to_i %>
+        <%= link_to "Next", lesson_path(params.permit(:lesson_length, :jlpt_level, :difficulty)), method: "get", id: 'next-button', class: 'btn btn-primary mt-1 ml-1', role: "button", style: "display: none;" %>
       <% end %>
     </div>
   </div>
