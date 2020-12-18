@@ -14,6 +14,8 @@
 #
 class Vocabulary < ApplicationRecord
 
+  has_many :users_vocabularies
+
   def self.counts_by_level
     group('level').pluck('level, COUNT(id)').to_h
   end

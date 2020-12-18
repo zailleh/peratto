@@ -15,16 +15,46 @@ class UsersVocabulariesController < ApplicationController
 
       render :check_answer
     else
-      vocabularies = Vocabulary.where(:level => params[:jlpt_level])
-      vocabularies = vocabularies.where.not(:kanji => [nil, ""]) if params[:difficulty] == "hard"
-      vocabulary_ids = vocabularies.ids
-      vocabulary_id = (vocabulary_ids - session[:viewed_cards]).sample
-
-      session[:viewed_cards] << vocabulary_id
       session[:lesson_length] = params[:lesson_length] if params[:lesson_length].present?
 
+      vocabularies = Vocabulary.where(:level => params[:jlpt_level])
+      vocabularies = vocabularies.where.not(:kanji => [nil, ""]) if params[:difficulty] == "hard"
+      vocabularies = vocabularies.where.not(:id => session[:viewed_cards]) if session[:viewed_cards].present?
+      vocabularies =
+        case params[:mode]
+        when "review"
+          vocabularies
+            .joins(:users_vocabularies)
+            .where(:users_vocabularies => { :user_id => current_user.id })
+        when "mistakes"
+          vocabularies
+           .joins(:users_vocabularies)
+            .where(:users_vocabularies => { :user_id => current_user.id })
+            .where('"users_vocabularies"."correct" - "users_vocabularies"."incorrect" < 0')
+        when "new"
+          vocabularies
+            .where.not(
+              :id => vocabularies
+                .joins(:users_vocabularies)
+                .where(:users_vocabularies => { :user_id => current_user.id })
+            )
+        else vocabularies
+        end
+
+      vocabulary_ids = vocabularies.ids
+      return redirect_to start_lesson_path if vocabulary_ids.blank?
+
+      @finished = vocabulary_ids.length == 1
+
+      vocabulary_id = vocabularies.ids.sample
+      session[:viewed_cards] << vocabulary_id
       @vocabulary = Vocabulary.find(vocabulary_id)
-      alternate_vocabulary = Vocabulary.where(:id => (vocabulary_ids - [vocabulary_id]).sample(4))
+
+      alternate_vocabulary =
+        Vocabulary
+          .where(:level => params[:jlpt_level])
+          .where.not(:id => vocabulary_id)
+          .sample(4)
 
       @answers = ([@vocabulary] + alternate_vocabulary).shuffle
     end

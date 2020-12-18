@@ -15,12 +15,12 @@
     <% end %>
 
     <div>
-      <% if session[:lesson_length].blank? || session[:viewed_cards].length >= session[:lesson_length].to_i %>
+      <% if @finished || session[:lesson_length].blank? || session[:viewed_cards].length >= session[:lesson_length].to_i %>
         <%= link_to "Finish", history_path, class: 'btn btn-secondary mt-1', role: "button", id: 'finish-button', style: session[:lesson_length].present? ? "display: none;" : "" %>
       <% end %>
 
-      <% if session[:lesson_length].blank? || session[:viewed_cards].length < session[:lesson_length].to_i %>
-        <%= link_to "Next", lesson_path(params.permit(:lesson_length, :jlpt_level, :difficulty)), method: "get", id: 'next-button', class: 'btn btn-primary mt-1 ml-1', role: "button", style: "display: none;" %>
+      <% if !@finished && (session[:lesson_length].blank? || session[:viewed_cards].length < session[:lesson_length].to_i) %>
+        <%= link_to "Next", lesson_path(params.permit(:lesson_length, :jlpt_level, :difficulty, :mode)), method: "get", id: 'next-button', class: 'btn btn-primary mt-1 ml-1', role: "button", style: "display: none;" %>
       <% end %>
     </div>
   </div>

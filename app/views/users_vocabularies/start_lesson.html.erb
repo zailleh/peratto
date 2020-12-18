@@ -2,8 +2,12 @@
   <h3>Start <%= params[:mode].titleize %> Lesson</h3>
   <% if params[:mode] == "endless"  %><p>Keep practicing until you're ready to drop</p><% end %>
   <% if params[:mode] == "random"  %><p>Practice a random selection of vocabulary</p><% end %>
+  <% if params[:mode] == "review"  %><p>Review already learned vocabulary</p><% end %>
+  <% if params[:mode] == "mistakes"  %><p>Review vocabulary you've made mistakes on previously</p><% end %>
+  <% if params[:mode] == "new"  %><p>Practice new vocabulary</p><% end %>
 
   <%= form_tag(lesson_path, method: "get") do |f| %>
+    <%= hidden_field_tag :mode, params[:mode] %>
     <div class="form-group">
       <%= label_tag :jlpt_level, 'JLPT Level' %>
       <div class="row justify-content-around">
@@ -32,7 +36,7 @@
         </div>
       </div>
     </div>
-    <% if params[:mode] == "random" %>
+    <% if params[:mode] != "endless" %>
       <div class="form-group">
         <%= label_tag :lesson_length, 'Number of Cards' %>
         <div class="row justify-content-around">
@@ -65,4 +69,7 @@
 
   <a class="btn btn-secondary btn-lg my-2" href="/start_lesson?mode=random" role="button">Random</a>
   <a class="btn btn-primary btn-lg my-2"href="/start_lesson?mode=endless" role="button">Endless</a>
+  <a class="btn btn-primary btn-lg my-2"href="/start_lesson?mode=review" role="button">Review</a>
+  <a class="btn btn-primary btn-lg my-2"href="/start_lesson?mode=mistakes" role="button">Mistakes</a>
+  <a class="btn btn-primary btn-lg my-2"href="/start_lesson?mode=new" role="button">New</a>
 <% end %>
