@@ -8,9 +8,9 @@
     </div>
   </div>
   <div class="card-footer text-muted d-flex flex-column align-items-end">
-    <% if params[:lesson_length].present? %>
+    <% if session[:lesson_length].present? %>
       <div class="progress w-100">
-        <div class="progress-bar" style="width: <%= session[:viewed_cards].length / params[:lesson_length].to_f * 100 %>%" role="progressbar" aria-valuenow="<%= session[:viewed_cards].length %>" aria-valuemin="0" aria-valuemax="<%= params[:lesson_length] %>"></div>
+        <div class="progress-bar" style="width: <%= session[:viewed_cards].length / session[:lesson_length].to_f * 100 %>%" role="progressbar" aria-valuenow="<%= session[:viewed_cards].length %>" aria-valuemin="0" aria-valuemax="<%= session[:lesson_length] %>"></div>
       </div>
     <% end %>
 
@@ -20,7 +20,7 @@
       <% end %>
 
       <% if !@finished && (session[:lesson_length].blank? || session[:viewed_cards].length < session[:lesson_length].to_i) %>
-        <%= link_to "Next", lesson_path(params.permit(:lesson_length, :jlpt_level, :difficulty, :mode)), method: "get", id: 'next-button', class: 'btn btn-primary mt-1 ml-1', role: "button", style: "display: none;" %>
+        <%= link_to "Next", lesson_path(params.permit(:jlpt_level, :difficulty, :mode)), method: "get", id: 'next-button', class: 'btn btn-primary mt-1 ml-1', role: "button", style: "display: none;" %>
       <% end %>
     </div>
   </div>

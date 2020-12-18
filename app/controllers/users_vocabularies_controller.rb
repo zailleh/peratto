@@ -17,6 +17,12 @@ class UsersVocabulariesController < ApplicationController
     else
       session[:lesson_length] = params[:lesson_length] if params[:lesson_length].present?
 
+      if params[:lesson_length].to_i == 0
+        params.extract!(:lesson_length)
+        session.delete(:lesson_length)
+      end
+
+
       vocabularies = Vocabulary.where(:level => params[:jlpt_level])
       vocabularies = vocabularies.where.not(:kanji => [nil, ""]) if params[:difficulty] == "hard"
       vocabularies = vocabularies.where.not(:id => session[:viewed_cards]) if session[:viewed_cards].present?
@@ -42,7 +48,17 @@ class UsersVocabulariesController < ApplicationController
         end
 
       vocabulary_ids = vocabularies.ids
-      return redirect_to start_lesson_path if vocabulary_ids.blank?
+      if vocabulary_ids.blank?
+        message =
+          case params[:mode]
+          when "mistakes" then "mistakes to review"
+          when "new" then "new vocabulary to learn"
+          else "to review"
+          end
+
+        flash[:lesson_message] = "There are no more #{message} in JLPT #{params[:jlpt_level]}"
+        return redirect_to start_lesson_path
+      end
 
       @finished = vocabulary_ids.length == 1
 

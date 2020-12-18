@@ -1,6 +1,5 @@
 <% if params[:mode].present? %>
   <h3>Start <%= params[:mode].titleize %> Lesson</h3>
-  <% if params[:mode] == "endless"  %><p>Keep practicing until you're ready to drop</p><% end %>
   <% if params[:mode] == "random"  %><p>Practice a random selection of vocabulary</p><% end %>
   <% if params[:mode] == "review"  %><p>Review already learned vocabulary</p><% end %>
   <% if params[:mode] == "mistakes"  %><p>Review vocabulary you've made mistakes on previously</p><% end %>
@@ -36,39 +35,41 @@
         </div>
       </div>
     </div>
-    <% if params[:mode] != "endless" %>
-      <div class="form-group">
-        <%= label_tag :lesson_length, 'Number of Cards' %>
-        <div class="row justify-content-around">
-          <div class="form-check">
-            <%= radio_button_tag :lesson_length, 10, true, :value => 10, :class => 'form-check-input' %>
-            <%= label_tag :lesson_length_10, 10, :class => 'form-check-label' %>
-          </div>
-          <div class="form-check">
-            <%= radio_button_tag :lesson_length, 25, false, :value => 25, :class => 'form-check-input' %>
-            <%= label_tag :lesson_length_25, 25, :class => 'form-check-label' %>
-          </div>
-          <div class="form-check">
-            <%= radio_button_tag :lesson_length, 50, false, :value => 50, :class => 'form-check-input' %>
-            <%= label_tag :lesson_length_50, 50, :class => 'form-check-label' %>
-          </div>
-          <div class="form-check">
-            <%= radio_button_tag :lesson_length, 100, false, :value => 100, :class => 'form-check-input' %>
-            <%= label_tag :lesson_length_100, 100, :class => 'form-check-label' %>
-          </div>
+    <div class="form-group">
+      <%= label_tag :lesson_length, 'Number of Cards' %>
+      <div class="row justify-content-around">
+        <div class="form-check">
+          <%= radio_button_tag :lesson_length, 10, true, :value => 10, :class => 'form-check-input' %>
+          <%= label_tag :lesson_length_10, 10, :class => 'form-check-label' %>
+        </div>
+        <div class="form-check">
+          <%= radio_button_tag :lesson_length, 25, false, :value => 25, :class => 'form-check-input' %>
+          <%= label_tag :lesson_length_25, 25, :class => 'form-check-label' %>
+        </div>
+        <div class="form-check">
+          <%= radio_button_tag :lesson_length, 50, false, :value => 50, :class => 'form-check-input' %>
+          <%= label_tag :lesson_length_50, 50, :class => 'form-check-label' %>
+        </div>
+        <div class="form-check">
+          <%= radio_button_tag :lesson_length, 0, false, :value => 0, :class => 'form-check-input' %>
+          <%= label_tag :lesson_length_0, "Endless", :class => 'form-check-label' %>
         </div>
       </div>
-    <% end %>
+    </div>
     <div class="d-flex justify-content-end">
       <%= submit_tag 'Start Lesson!', class: 'btn btn-primary', name: nil %>
     </div>
   <% end %>
 <% else %>
   <h3>Start Lesson</h3>
+  <% if flash[:lesson_message].present? %>
+    <p class="alert alert-warning" role="alert">
+      <%= flash[:lesson_message].html_safe %>
+    </p>
+  <% end %>
   <p>What would you like to do today?</p>
 
   <a class="btn btn-secondary btn-lg my-2" href="/start_lesson?mode=random" role="button">Random</a>
-  <a class="btn btn-primary btn-lg my-2"href="/start_lesson?mode=endless" role="button">Endless</a>
   <a class="btn btn-primary btn-lg my-2"href="/start_lesson?mode=review" role="button">Review</a>
   <a class="btn btn-primary btn-lg my-2"href="/start_lesson?mode=mistakes" role="button">Mistakes</a>
   <a class="btn btn-primary btn-lg my-2"href="/start_lesson?mode=new" role="button">New</a>
