@@ -14,8 +14,21 @@
       </div>
       <div class="col-md-6 card-body pb-0" style="padding-top: 1px">
         <ul class="list-group list-group-flush">
-          <% study_stats = @user_vocabularies_counts[level] || Hash.new(0) %>
-          <% level_completion = (study_stats[:studied] / count.to_f * 100).truncate(2) %>
+          <%
+            study_stats = @user_vocabularies_counts[level] || Hash.new(0)
+            level_completion = (study_stats[:studied] / count.to_f * 100).truncate(2)
+            total_practiced = study_stats[:correct] + study_stats[:incorrect]
+            level_score = total_practiced.zero? ? 0.0 : (((study_stats[:correct] - study_stats[:incorrect]) / total_practiced.to_f) * level_completion).round(2)
+            grade =
+              case level_score
+              when (1..70) then "C"
+              when (70..80) then "B"
+              when (80..90) then "A"
+              when (90..95) then "A+"
+              when (95..100) then "S"
+              else ""
+              end
+          %>
           <li class="list-group-item">
             <span>
               Total Studied: <%= study_stats[:studied] %> (<%=  level_completion %>%)
@@ -26,9 +39,10 @@
               </div>
             </div>
           </li>
+          <li class="list-group-item">Grade: <span class="grade <%= grade.downcase %>"><%= grade %></span> (<%= level_score %>%)</li>
+          <li class="list-group-item">Ratio: <%= study_stats[:incorrect].zero? ? 0.0 : (study_stats[:correct].to_f / study_stats[:incorrect].to_f).round(2) %></li>
           <li class="list-group-item">Correct: <%= study_stats[:correct] %></li>
           <li class="list-group-item">Incorrect: <%= study_stats[:incorrect] %></li>
-          <li class="list-group-item">Ratio: <%= (study_stats[:correct].to_f / study_stats[:incorrect].to_f).truncate(2) %></li>
         </ul>
       </div>
     </div>
