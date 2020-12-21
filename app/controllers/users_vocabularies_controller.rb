@@ -17,7 +17,7 @@ class UsersVocabulariesController < ApplicationController
     else
       session[:lesson_length] = params[:lesson_length] if params[:lesson_length].present?
 
-      if params[:lesson_length].to_i == 0
+      if params[:lesson_length].present? && params[:lesson_length].to_i == 0
         params.extract!(:lesson_length)
         session.delete(:lesson_length)
       end
