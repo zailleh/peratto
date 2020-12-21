@@ -18,7 +18,7 @@
             study_stats = @user_vocabularies_counts[level] || Hash.new(0)
             level_completion = (study_stats[:studied] / count.to_f * 100).truncate(2)
             total_practiced = study_stats[:correct] + study_stats[:incorrect]
-            level_score = total_practiced.zero? ? 0.0 : (((study_stats[:correct] - study_stats[:incorrect]) / total_practiced.to_f) * level_completion).round(2)
+            level_score = total_practiced.zero? ? 0.0 : ((([study_stats[:correct] - study_stats[:incorrect], 0].max) / total_practiced.to_f) * level_completion).round(2)
             grade =
               case level_score
               when (1..70) then "C"

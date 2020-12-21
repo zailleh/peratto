@@ -70,7 +70,7 @@ class UsersVocabulariesController < ApplicationController
         Vocabulary
           .where(:level => params[:jlpt_level])
           .where.not(:id => vocabulary_id)
-          .where.not(:hiragana => vocabulary.hiragana, :meaning => vocabulary.meaning)
+          .where.not(:hiragana => @vocabulary.hiragana, :meaning => @vocabulary.meaning)
           .sample(4)
 
       @answers = ([@vocabulary] + alternate_vocabulary).shuffle
